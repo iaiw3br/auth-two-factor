@@ -4,6 +4,7 @@ const app = express();
 
 app.use(express.json());
 app.set('view engine', 'ejs');
+require('./src/routes').registrationRoutes(app);
 
 app.get('/', (req, res) => {
    res.send('Hello');
