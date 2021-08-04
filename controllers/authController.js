@@ -25,7 +25,7 @@ const signup = async (req, res) => {
 
             const newUser = await db.user.create({
                 name,
-                secretKey,
+                secretKey: secretKey.base32,
                 password: bcrypt.hashSync(password, 8),
             }, {transaction});
 
