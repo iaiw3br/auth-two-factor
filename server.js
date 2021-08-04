@@ -1,10 +1,11 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 
 
 app.use(express.json());
-app.set('view engine', 'ejs');
-require('./src/routes').registrationRoutes(app);
+app.use(bodyParser.urlencoded({extended: true}));
+require('./routes').registrationRoutes(app);
 
 app.get('/', (req, res) => {
    res.send('Hello');
