@@ -36,6 +36,32 @@ const signup = async (req, res) => {
     });
 }
 
+/**
+ * Верификация пользователя по переданному токену из гугл аутентификации
+ * @param {object} req объект запроса
+ * @param {string} req.body.userId идентификатор пользователя
+ * @param {number} req.body.token гугл аутентификационный номер
+ * @param {object} res объект ответа
+ * @returns {Promise<boolean>} true - если верификация пройдена, иначе false
+ */
+const verify = async (req, res) => {
+    const {userId, token} = req.body;
+
+    try {
+        const user = await db.user.findByPk(userId);
+        const verified = speakeasy.totp.verify({
+            secret: user.secretKey,
+            encoding: 'base32',
+            token
+        });
+
+        return res.json({verified})
+    } catch (err) {
+        res.status(500).send({message: err.message});
+    }
+}
+
 module.exports = {
-    signup
+    signup,
+    verify
 }
